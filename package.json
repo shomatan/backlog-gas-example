@@ -1,0 +1,28 @@
+{
+  "name": "backlog-gas-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shomatan/backlog-gas-example.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shomatan/backlog-gas-example/issues"
+  },
+  "homepage": "https://github.com/shomatan/backlog-gas-example#readme",
+  "devDependencies": {
+    "@types/google-apps-script": "0.0.25",
+    "gas-webpack-plugin": "^0.3.0",
+    "ts-loader": "^4.4.2",
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0"
+  }
+}
