@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+      // Prevent forms from submitting.
+      function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].addEventListener('submit', function(event) {
+            event.preventDefault();
+          });
+        }
+      }
+      window.addEventListener('load', preventFormSubmit);
+
+      function onSuccess() {
+        
+      }
+
+      function onFailure() {
+
+      }
+
+      function handleFormSubmit(formObject) {
+        google.script.run
+          .withSuccessHandler(onSuccess)
+          .withFailureHandler(onFailure)
+          .execute(formObject);
+      }
+    </script>
+  </head>
+  <body>
+    <? var config = getConfig(); ?>
+    <form id="myForm" onsubmit="handleFormSubmit(this)">
+      <h4>Backlog URL</h4>
+      <input type="text" name="url" value="<?= config.url ?>" />
+			
+			<h4>Backlog API key</h4>
+      <input type="text" name="key" value="<?= config.apiKey ?>" />
+			
+			<h4>Backlog project key</h4>
+      <input type="text" name="project" value="<?= config.projectKey ?>" />
+      <br />
+      <br />
+      <br />
+      <input type="submit" value="実行" />
+    </form>
+  </body>
+</html>
