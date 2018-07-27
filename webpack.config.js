@@ -1,4 +1,3 @@
-
 const path = require('path');
 const GasPlugin = require("gas-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin')

@@ -8,10 +8,6 @@ global.onOpen = function() {
     .addToUi()
 }
 
-global.getConfig = function(): Config {
-	return getConfig()
-}
-
 global.showDialog = function showDialog() {
 	const html = HtmlService
 		.createTemplateFromFile('index')
@@ -20,6 +16,10 @@ global.showDialog = function showDialog() {
 	SpreadsheetApp
 		.getUi()
 		.showModalDialog(html, 'Backlogから自分の課題を取得するサンプルアプリケーション')
+}
+
+global.getConfig = function(): Config {
+	return getConfig()
 }
 
 global.execute = function(form: any): void {
