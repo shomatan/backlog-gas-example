@@ -8,7 +8,7 @@ global.onOpen = function() {
     .addToUi()
 }
 
-global.showDialog = function showDialog() {
+global.showDialog = function() {
 	const html = HtmlService
 		.createTemplateFromFile('index')
 		.evaluate()	
@@ -22,14 +22,8 @@ global.getConfig = function(): Config {
 	return getConfig()
 }
 
-global.execute = function(form: any): void {
-	const url = form.url
-	const apiKey = form.key
-	const projectKey = form.project
-
-	setUserProperty('url', url)
-	setUserProperty('apiKey', apiKey)
-	setUserProperty('projectKey', projectKey)
+global.execute = function(config: Config): void {
+	storeConfig(config)
 
 }
 
@@ -46,6 +40,12 @@ const getConfig = (): Config =>
 		getUserProperty('apiKey'),
 		getUserProperty('projectKey')	
 	)
+
+const storeConfig = (config: Config): void => {
+	setUserProperty('url', config.url)
+	setUserProperty('apiKey', config.apiKey)
+	setUserProperty('projectKey', config.projectKey)
+}
 
 export interface Config {
   readonly url: string
