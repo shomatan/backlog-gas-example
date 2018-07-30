@@ -59,7 +59,7 @@ global.execute = function(config: Config): string {
     sheet.getRange(rowNumber, 4).setValue(user.mailAddress)
     SpreadsheetApp.flush()
   }
-	return "success"
+  return "success"
 }
 
 export const jsonToUser = (json: any): User =>
