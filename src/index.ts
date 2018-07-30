@@ -1,6 +1,5 @@
-import HTTPResponse = GoogleAppsScript.URL_Fetch.HTTPResponse
-import URLFetchRequestOptions = GoogleAppsScript.URL_Fetch.UrlFetchApp
 import { PropertyService, PropertyServiceImpl } from "./PropertyService";
+import { HttpClientImpl } from "./HttpClient";
 
 declare var global: any
 
@@ -23,18 +22,21 @@ global.showDialog = function() {
 }
 
 global.getConfig = function(): Config {
-  const propertyService = PropertyServiceImpl()
-  return getConfig(propertyService)
+	// const propertyService = PropertyServiceImpl()
+	throw new Error("error")
+  //return getConfig(propertyService)
 }
 
 global.execute = function(config: Config): string {
-  const propertyService = PropertyServiceImpl()
+	const propertyService = PropertyServiceImpl()
+	const httpClient = HttpClientImpl()
 
   // フォームに入力された値を保存し、次回から入力しなくてもいいようにする
   storeConfig(config, propertyService)
 
   // プロジェクトユーザー一覧を取得する
-  const usersJson = httpGet(`${config.url}/api/v2/projects/${config.projectKey}/users?apiKey=${config.apiKey}`)
+	const uri = `${config.url}/api/v2/projects/${config.projectKey}/users?apiKey=${config.apiKey}`
+	const usersJson = httpClient.get(uri)
   const users = Object.keys(usersJson).map(key => jsonToUser(usersJson[key]))
 
   // スプレッドシートに新たなシートを追加する
@@ -69,20 +71,7 @@ const jsonToUser = (json: any): User =>
 		json["mailAddress"]
 	)
 
-const httpGet = (uri: string): JSON => {
-	const response = doRequest(uri)
-	return httpResponseToJson(response)
-}
-
-const doRequest = (uri: string, options?: URLFetchRequestOptions): HTTPResponse => {
-	if (options == null) return UrlFetchApp.fetch(uri)
-	else return UrlFetchApp.fetch(uri, options)
-}
-
-const httpResponseToJson = (response: HTTPResponse): JSON => 
-	JSON.parse(response.getContentText())
-
-export const getConfig = (propertyService: PropertyService): Config =>
+const getConfig = (propertyService: PropertyService): Config =>
 	Config(
 		propertyService.get('url'),
 		propertyService.get('apiKey'),
@@ -95,13 +84,13 @@ const storeConfig = (config: Config, propertyService: PropertyService): void => 
 	propertyService.set('projectKey', config.projectKey)
 }
 
-export interface Config {
+interface Config {
   readonly url: string
 	readonly apiKey: string
 	readonly projectKey: string
 }
 
-export const Config = (url: string, apiKey: string, projectKey: string) => ({url, apiKey, projectKey})
+const Config = (url: string, apiKey: string, projectKey: string) => ({url, apiKey, projectKey})
 
 interface User {
 	readonly id: number
