@@ -14,8 +14,8 @@
       }
       window.addEventListener('load', preventFormSubmit);
 
-      function onSuccess() {
-        
+      function onSuccess(result) {
+        google.script.host.close();
       }
 
       function onFailure(e) {
