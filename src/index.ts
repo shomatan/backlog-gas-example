@@ -22,9 +22,8 @@ global.showDialog = function() {
 }
 
 global.getConfig = function(): Config {
-	// const propertyService = PropertyServiceImpl()
-	throw new Error("error")
-  //return getConfig(propertyService)
+	const propertyService = PropertyServiceImpl()
+  return getConfigFromProperty(propertyService)
 }
 
 global.execute = function(config: Config): string {
@@ -71,7 +70,7 @@ const jsonToUser = (json: any): User =>
 		json["mailAddress"]
 	)
 
-const getConfig = (propertyService: PropertyService): Config =>
+const getConfigFromProperty = (propertyService: PropertyService): Config =>
 	Config(
 		propertyService.get('url'),
 		propertyService.get('apiKey'),
