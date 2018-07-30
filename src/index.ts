@@ -1,33 +1,37 @@
 import HTTPResponse = GoogleAppsScript.URL_Fetch.HTTPResponse
 import URLFetchRequestOptions = GoogleAppsScript.URL_Fetch.UrlFetchApp
+import { PropertyService, PropertyServiceImpl } from "./PropertyService";
 
 declare var global: any
 
 global.onOpen = function() {
-	SpreadsheetApp
-		.getUi()
+  SpreadsheetApp
+    .getUi()
     .createMenu('Backlog')
     .addItem('実行フォームを開く', 'showDialog')
     .addToUi()
 }
 
 global.showDialog = function() {
-	const html = HtmlService
-		.createTemplateFromFile('index')
-		.evaluate()	
-		
-	SpreadsheetApp
-		.getUi()
-		.showModalDialog(html, 'Backlogからプロジェクトユーザーを取得するサンプルアプリケーション')
+  const html = HtmlService
+    .createTemplateFromFile('index')
+    .evaluate()	
+
+  SpreadsheetApp
+    .getUi()
+    .showModalDialog(html, 'Backlogからプロジェクトユーザーを取得するサンプルアプリケーション')
 }
 
 global.getConfig = function(): Config {
-	return getConfig()
+  const propertyService = PropertyServiceImpl()
+  return getConfig(propertyService)
 }
 
 global.execute = function(config: Config): string {
+  const propertyService = PropertyServiceImpl()
+
   // フォームに入力された値を保存し、次回から入力しなくてもいいようにする
-  storeConfig(config)
+  storeConfig(config, propertyService)
 
   // プロジェクトユーザー一覧を取得する
   const usersJson = httpGet(`${config.url}/api/v2/projects/${config.projectKey}/users?apiKey=${config.apiKey}`)
@@ -78,24 +82,17 @@ const doRequest = (uri: string, options?: URLFetchRequestOptions): HTTPResponse 
 const httpResponseToJson = (response: HTTPResponse): JSON => 
 	JSON.parse(response.getContentText())
 
-const getUserProperty = (key: string): string =>
-	PropertiesService.getUserProperties().getProperty(key)
-
-const setUserProperty = (key: string, value: string): void => {
-	PropertiesService.getUserProperties().setProperty(key, value)
-}
-
-const getConfig = (): Config =>
+export const getConfig = (propertyService: PropertyService): Config =>
 	Config(
-		getUserProperty('url'),
-		getUserProperty('apiKey'),
-		getUserProperty('projectKey')	
+		propertyService.get('url'),
+		propertyService.get('apiKey'),
+		propertyService.get('projectKey')	
 	)
 
-const storeConfig = (config: Config): void => {
-	setUserProperty('url', config.url)
-	setUserProperty('apiKey', config.apiKey)
-	setUserProperty('projectKey', config.projectKey)
+const storeConfig = (config: Config, propertyService: PropertyService): void => {
+	propertyService.set('url', config.url)
+	propertyService.set('apiKey', config.apiKey)
+	propertyService.set('projectKey', config.projectKey)
 }
 
 export interface Config {
