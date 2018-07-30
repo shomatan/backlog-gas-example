@@ -62,7 +62,7 @@ global.execute = function(config: Config): string {
 	return "success"
 }
 
-const jsonToUser = (json: any): User =>
+export const jsonToUser = (json: any): User =>
 	User(
 		json["id"],
 		json["userId"],
@@ -91,11 +91,11 @@ interface Config {
 
 const Config = (url: string, apiKey: string, projectKey: string) => ({url, apiKey, projectKey})
 
-interface User {
+export interface User {
 	readonly id: number
 	readonly userId: string
 	readonly name: string
 	readonly mailAddress: string
 }
 
-const User = (id: number, userId: string, name: string, mailAddress: string) => ({id, userId, name, mailAddress}) 
+export const User = (id: number, userId: string, name: string, mailAddress: string) => ({id, userId, name, mailAddress}) 
