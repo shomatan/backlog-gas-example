@@ -1,3 +1,6 @@
+import HTTPResponse = GoogleAppsScript.URL_Fetch.HTTPResponse
+import URLFetchRequestOptions = GoogleAppsScript.URL_Fetch.UrlFetchApp
+
 declare var global: any
 
 global.onOpen = function() {
@@ -23,9 +26,36 @@ global.getConfig = function(): Config {
 }
 
 global.execute = function(config: Config): void {
+	// フォームに入力された値を保存し、次回から入力しなくてもいいようにする
 	storeConfig(config)
 
+	// プロジェクトユーザー一覧を取得する
+	const usersJson = httpGet(`${config.url}/api/v2/projects/${config.projectKey}/users?apiKey=${config.apiKey}`)
+	const users = Object.keys(usersJson).map(key => jsonToUser(usersJson[key]))
+
+	throw new Error(users[0].name)
 }
+
+const jsonToUser = (json: any): User =>
+	User(
+		json["id"],
+		json["userId"],
+		json["name"],
+		json["mailAddress"]
+	)
+
+const httpGet = (uri: string): JSON => {
+	const response = doRequest(uri)
+	return httpResponseToJson(response)
+}
+
+const doRequest = (uri: string, options?: URLFetchRequestOptions): HTTPResponse => {
+	if (options == null) return UrlFetchApp.fetch(uri)
+	else return UrlFetchApp.fetch(uri, options)
+}
+
+const httpResponseToJson = (response: HTTPResponse): JSON => 
+	JSON.parse(response.getContentText())
 
 const getUserProperty = (key: string): string =>
 	PropertiesService.getUserProperties().getProperty(key)
@@ -54,3 +84,12 @@ export interface Config {
 }
 
 export const Config = (url: string, apiKey: string, projectKey: string) => ({url, apiKey, projectKey})
+
+interface User {
+	readonly id: number
+	readonly userId: string
+	readonly name: string
+	readonly mailAddress: string
+}
+
+const User = (id: number, userId: string, name: string, mailAddress: string) => ({id, userId, name, mailAddress}) 

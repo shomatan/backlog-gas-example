@@ -18,8 +18,8 @@
         
       }
 
-      function onFailure() {
-
+      function onFailure(e) {
+        alert([e.message, e.stack]);
       }
 
       function handleFormSubmit(formObject) {
