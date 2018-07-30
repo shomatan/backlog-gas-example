@@ -1,11 +1,11 @@
 import Properties = GoogleAppsScript.Properties.Properties
 
-export interface PropertyService {
+export interface UserPropertyService {
   get: (key: string) => string,
   set: (key: string, value: string) => Properties
 }
 
-export const PropertyServiceImpl = (): PropertyService => ({
+export const UserPropertyServiceImpl = (): UserPropertyService => ({
   get: (key: string): string =>
     PropertiesService.getUserProperties().getProperty(key),
   set: (key: string, value: string): Properties =>

@@ -1,4 +1,4 @@
-import { PropertyService, PropertyServiceImpl } from "./PropertyService";
+import { UserPropertyService, UserPropertyServiceImpl } from "./UserPropertyService";
 import { HttpClientImpl } from "./HttpClient";
 
 declare var global: any
@@ -22,12 +22,12 @@ global.showDialog = function() {
 }
 
 global.getConfig = function(): Config {
-	const propertyService = PropertyServiceImpl()
+	const propertyService = UserPropertyServiceImpl()
   return getConfigFromProperty(propertyService)
 }
 
 global.execute = function(config: Config): string {
-	const propertyService = PropertyServiceImpl()
+	const propertyService = UserPropertyServiceImpl()
 	const httpClient = HttpClientImpl()
 
   // フォームに入力された値を保存し、次回から入力しなくてもいいようにする
@@ -70,14 +70,14 @@ const jsonToUser = (json: any): User =>
 		json["mailAddress"]
 	)
 
-const getConfigFromProperty = (propertyService: PropertyService): Config =>
+const getConfigFromProperty = (propertyService: UserPropertyService): Config =>
 	Config(
 		propertyService.get('url'),
 		propertyService.get('apiKey'),
 		propertyService.get('projectKey')	
 	)
 
-const storeConfig = (config: Config, propertyService: PropertyService): void => {
+const storeConfig = (config: Config, propertyService: UserPropertyService): void => {
 	propertyService.set('url', config.url)
 	propertyService.set('apiKey', config.apiKey)
 	propertyService.set('projectKey', config.projectKey)
