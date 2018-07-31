@@ -29,7 +29,7 @@
     "ts-jest": "^23.0.1",
     "ts-loader": "^4.4.2",
     "typescript": "^2.9.2",
-    "webpack": "^4.16.2",
+    "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0"
   },
   "jest": {
@@ -47,5 +47,6 @@
       "json",
       "node"
     ]
-  }
+  },
+  "dependencies": {}
 }
